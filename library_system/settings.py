@@ -17,11 +17,39 @@ import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# مجلد التطوير اللي فيه ملفات static الأصلية
+
+
+
+
+
+
+
+
+
+
 LOGIN_URL = '/login/'
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
