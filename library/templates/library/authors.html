@@ -1,0 +1,88 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<style>
+.author-card {
+    border-radius: 18px;
+    transition: 0.3s ease;
+    background: #ffffff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.author-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.author-img {
+    height: 250px;
+    object-fit: cover;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+}
+
+.card-body {
+    padding: 1rem 1.25rem;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.author-bio {
+    font-size: 0.95rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.author-books {
+    font-size: 0.9rem;
+    color: #777;
+    font-weight: 500;
+}
+</style>
+
+<div class="container my-5">
+    <h2 class="fw-bold mb-4 text-center">✍️ Explore Authors</h2>
+    <div class="row g-4">
+        {% for author in authors %}
+        <div class="col-md-4 col-sm-6">
+            <div class="card author-card h-100">
+                {% if author.photo %}
+                <img src="{{ author.photo.url }}" class="card-img-top author-img">
+                {% else %}
+                <img src="/static/images/default-author.png" class="card-img-top author-img">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="author-name">{{ author.name }}</h5>
+                    <p class="author-bio">{{ author.bio|truncatewords:25 }}</p>
+                    <p class="author-books">Books: {{ author.book_set.count }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock %}

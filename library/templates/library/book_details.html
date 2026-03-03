@@ -1,0 +1,121 @@
+{% extends 'library/base.html' %}
+{% block content %}
+{% load static %}
+
+{% if messages %}
+  {% for message in messages %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+{% endif %}
+<div class="container my-5">
+  <div class="row g-4 align-items-start">
+
+    <!-- Book Cover -->
+    <!-- Book Cover -->
+<div class="col-md-4 text-center">
+  <div class="card shadow-sm border-0">
+    <img src="{{ book.cover.url }}" alt="{{ book.title }}" class="card-img-top rounded">
+    <div class="card-body mt-2">
+
+      {% if book_status == 'visitor' %}
+        <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary w-100 fw-bold">
+          Login to Borrow
+        </a>
+
+      {% elif book_status == 'currently_borrowed' %}
+        <span class="badge bg-warning fs-6 w-100 py-2">Borrowed by You</span>
+
+      {% elif book_status == 'can_review' %}
+        <span class="badge bg-warning fs-6 w-100 py-2 mb-2">Borrowed by You</span>
+       {% if has_reviewed %}
+    <a href="#" class="btn btn-success w-100 fw-bold disabled">Reviewed by You</a>
+{% else %}
+    <a id="addReviewBtn" href="{% url 'add_review_page' book.id %}" class="btn btn-success w-100 fw-bold">
+      Add Review
+    </a>
+{% endif %}
+
+      {% elif book_status == 'can_borrow' %}
+        <form method="post" action="{% url 'borrow_book' book.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-dark w-100 fw-bold">Borrow</button>
+        </form>
+
+      {% elif book_status == 'fully_borrowed' %}
+        <span class="badge bg-danger fs-6 w-100 py-2">Fully Borrowed</span>
+
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+    <!-- Book Info -->
+    <div class="col-md-8">
+      <div class="card shadow-sm border-0 p-3 bg-light h-100">
+        <h2 class="fw-bold mb-3">{{ book.title }}</h2>
+        <p><strong>Author:</strong> {{ book.author.name }}</p>
+        <p><strong>Category:</strong> {{ book.category.name }}</p>
+        <p><strong>Year:</strong> {{ book.publication_year }}</p>
+        <p><strong>Pages:</strong> {{ book.pages }}</p>
+        <p><strong>Language:</strong> {{ book.language }}</p>
+        <hr>
+        <p>{{ book.description }}</p>
+        <p><strong>Available:</strong> <span class="text-success">{{ book.available_copies }}</span>  {{ book.total_copies }}</p>
+      </div>
+    </div>
+
+  </div>
+
+ 
+
+<!-- Toggle Review Form -->
+<script>
+function toggleReviewForm() {
+  const form = document.getElementById("addReviewForm");
+  const btn = document.getElementById("reviewBtn");
+  if(form.style.display === "none"){
+    form.style.display = "block";
+  ;
+    form.scrollIntoView({behavior:"smooth"});
+  } else {
+    form.style.display = "none";
+    btn.innerText = "Add Review";
+  }
+}
+
+// Star Rating
+const stars = document.querySelectorAll('.star');
+const ratingInput = document.getElementById('rating');
+stars.forEach((star,index)=>{
+  star.addEventListener('click',()=>{
+    ratingInput.value=index+1;
+    stars.forEach((s,i)=>{
+      if(i<=index){
+        s.classList.add("text-warning");
+        s.classList.remove("text-muted");
+      } else {
+        s.classList.add("text-muted");
+        s.classList.remove("text-warning");
+      }
+    });
+  });
+});
+
+
+
+
+
+
+
+
+
+
+ 
+
+</script>
+
+{% endblock %}

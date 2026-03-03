@@ -1,0 +1,50 @@
+{% extends 'library/base.html' %}
+{% load static %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4 text-center">📩 Contact Us</h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <div class="alert {% if msg.tags %}alert-{{ msg.tags }}{% endif %}" role="alert">
+                {{ msg }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" class="p-4 shadow-sm rounded bg-white">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" name="name" class="form-control {% if errors.name %}is-invalid{% endif %}"
+                   placeholder="Name" value="{{ data.name|default:'' }}">
+            {% if errors.name %}<div class="invalid-feedback">{{ errors.name }}</div>{% endif %}
+        </div>
+
+        <div class="mb-3">
+            <input type="email" name="email" class="form-control {% if errors.email %}is-invalid{% endif %}"
+                   placeholder="Email" value="{{ data.email|default:'' }}">
+            {% if errors.email %}<div class="invalid-feedback">{{ errors.email }}</div>{% endif %}
+        </div>
+
+        <div class="mb-3">
+            <input type="text" name="subject" class="form-control {% if errors.subject %}is-invalid{% endif %}"
+                   placeholder="Subject" value="{{ data.subject|default:'' }}">
+            {% if errors.subject %}<div class="invalid-feedback">{{ errors.subject }}</div>{% endif %}
+        </div>
+
+        <div class="mb-3">
+            <textarea name="message" rows="5" class="form-control {% if errors.message %}is-invalid{% endif %}"
+                      placeholder="Message">{{ data.message|default:'' }}</textarea>
+            {% if errors.message %}<div class="invalid-feedback">{{ errors.message }}</div>{% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Send</button>
+    </form>
+
+    <div class="mt-4 text-start text-muted" style="font-size: 0.95rem; line-height: 1.6;">
+        <p><strong>Email:</strong> library@gmail.com</p>
+        <p><strong>Phone:</strong> 123-456-789</p>
+        <p><strong>Address:</strong> Gaza City</p>
+    </div>
+</div>
+{% endblock %}

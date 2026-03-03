@@ -1,0 +1,41 @@
+{% extends 'library/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">My Borrowed Books</h2>
+
+    {% if borrows %}
+        <div class="row">
+        {% for borrow in borrows %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow">
+                    <img src="{{ borrow.book.cover.url }}" class="card-img-top" style="height:250px; object-fit:cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ borrow.book.title }}</h5>
+
+                        <p>Borrowed: {{ borrow.borrow_date|date:"Y-m-d" }}</p>
+                        <p>Return Date: {{ borrow.expected_return_date|date:"Y-m-d" }}</p>
+                        <p>Remaining Days: {{ borrow.remaining_days }}</p>
+
+                        {% if borrow.is_late %}
+                            <span class="badge bg-danger">Late</span>
+                        {% else %}
+                            <span class="badge bg-success">On Time</span>
+                        {% endif %}
+
+                        <br><br>
+                        <a href="{% url 'return_book' borrow.book.id %}" 
+                           class="btn btn-danger w-100">
+                           Return Book
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>You have no borrowed books.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<div class="container my-4">
+    <h2>Edit Profile</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <!-- Full Name -->
+        <div class="mb-3">
+            <label for="full_name">Full Name</label>
+            <input type="text" name="full_name" value="{{ data.full_name|default:request.user.first_name }}" class="form-control">
+            {% if errors.full_name %}
+                <div class="text-danger">{{ errors.full_name }}</div>
+            {% endif %}
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="email">Email</label>
+            <input type="email" name="email" value="{{ data.email|default:request.user.email }}" class="form-control">
+            {% if errors.email %}
+                <div class="text-danger">{{ errors.email }}</div>
+            {% endif %}
+        </div>
+
+
+
+
+       <div class="mb-3">
+    <label for="password">Password</label>
+    <input type="password" name="password" class="form-control" placeholder="Enter new password if you want to change it">
+    {% if errors.password %}
+        <div class="text-danger">{{ errors.password }}</div>
+    {% endif %}
+</div>
+
+<div class="mb-3">
+    <label for="password2">Confirm Password</label>
+    <input type="password" name="password2" class="form-control" placeholder="Re-enter password">
+    {% if errors.password2 %}
+        <div class="text-danger">{{ errors.password2 }}</div>
+    {% endif %}
+</div>
+        <!-- Phone & Profile Image (from ProfileForm) -->
+        {{ profile_form.as_p }}
+
+        <!-- For phone error -->
+        {% if errors.phone %}
+            <div class="text-danger">{{ errors.phone }}</div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

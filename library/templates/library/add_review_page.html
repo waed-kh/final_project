@@ -1,0 +1,141 @@
+{% extends 'library/base.html' %}
+{% block content %}
+{% load static %}
+
+<!-- ====== Messages (Top of Page) ====== -->
+<div class="container mt-3">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+</div>
+
+<!-- ====== Book Details ====== -->
+<div class="card mb-4 shadow-lg border-0 rounded-4 overflow-hidden">
+  <div class="row g-0">
+    
+    <!-- صورة الكتاب -->
+    <div class="col-md-4 text-center bg-light d-flex align-items-center justify-content-center p-3">
+      {% if book.cover_image %}
+        <img src="{{ book.cover_image.url }}" class="img-fluid rounded shadow-sm" alt="{{ book.title }}" style="max-height:250px;">
+      {% else %}
+        <img src="{{ book.cover.url }}" alt="{{ book.title }}" class="img-fluid rounded shadow-sm" style="max-height:250px;">
+      {% endif %}
+    </div>
+
+    <!-- تفاصيل الكتاب -->
+    <div class="col-md-8 p-3 d-flex flex-column justify-content-center">
+      <h2 class="fw-bold mb-2" style="font-size:1.8rem; line-height:1.2;">{{ book.title }}</h2>
+      <p class="mb-1 text-secondary"><strong>Author:</strong> {{ book.author.name }}</p>
+      <p class="mb-1 text-secondary"><strong>Category:</strong> {{ book.category.name }}</p>
+      <p class="mb-2 text-muted" style="font-size:0.95rem;"><strong>Description:</strong> {{ book.description }}</p>
+      <p class="mb-0 text-success fw-bold"><strong>Available Copies:</strong> {{ book.available_copies }}</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ====== Review Form ====== -->
+<div class="mb-5 p-4 bg-light border rounded-3 shadow-sm">
+  <h4 class="mb-3">Add Your Review</h4>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label class="fw-bold">Rating</label>
+      <div id="star-rating">
+        {% for i in "12345"|make_list %}
+          <span class="star fs-2 text-muted me-1" data-value="{{ forloop.counter }}" style="cursor:pointer;">★</span>
+        {% endfor %}
+        {% if review_errors.rating %}
+          <div class="text-danger mt-1">{{ review_errors.rating }}</div>
+        {% endif %}
+      </div>
+      <input type="hidden" name="rating" id="rating">
+    </div>
+    <div class="mb-3">
+      <label class="fw-bold">Comment</label>
+      <textarea name="comment" class="form-control" rows="4" placeholder="Write your comment here..."></textarea>
+      {% if review_errors.comment %}
+        <div class="text-danger mt-1">{{ review_errors.comment }}</div>
+      {% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary fw-bold">Submit Review</button>
+  </form>
+</div>
+
+<!-- ====== Reviews Carousel ====== -->
+{% if reviews %}
+<div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for chunk in review_chunks %}
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <div class="row g-3">
+          {% for review in chunk %}
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm p-3 rounded-3">
+              <div class="d-flex align-items-center mb-2">
+                {% if review.student.profile.profile_image %}
+                  <img src="{{ review.student.profile.profile_image.url }}" class="rounded-circle me-2" width="40" height="40">
+                {% else %}
+<span class="d-inline-block rounded-circle  text-white text-center me-2" 
+      style="width:40px; height:40px; line-height:40px; font-size:20px; background-color: rgba(0, 0, 0, 0.284); position: relative; left: 10px;;">
+  <i class="bi bi-person-fill"></i>
+</span>
+                {% endif %}
+                <strong>{{ review.student.username }}</strong>
+              </div>
+              <div class="mb-2">
+                {% for i in "12345"|make_list %}
+                  {% if forloop.counter <= review.rating %}
+                    <span class="text-warning">★</span>
+                  {% else %}
+                    <span class="text-muted">★</span>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <p>{{ review.comment|truncatewords:15 }}</p>
+              <small class="text-muted">{{ review.created_at|date:"d M Y" }}</small>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+  </button>
+</div>
+{% else %}
+<p class="text-muted text-center">No reviews yet.</p>
+{% endif %}
+
+<!-- ====== Star Rating Script ====== -->
+<script>
+const stars = document.querySelectorAll('.star');
+const ratingInput = document.getElementById('rating');
+
+stars.forEach((star,index)=>{
+  star.addEventListener('click',()=>{
+    ratingInput.value = index+1;
+    stars.forEach((s,i)=>{
+      if(i <= index){
+        s.classList.add("text-warning");
+        s.classList.remove("text-muted");
+      } else {
+        s.classList.add("text-muted");
+        s.classList.remove("text-warning");
+      }
+    });
+  });
+});
+</script>
+
+{% endblock %}

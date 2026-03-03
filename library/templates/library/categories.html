@@ -1,0 +1,75 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<style>
+.category-card {
+    border-radius: 25px; /* أكبر حواف */
+    transition: 0.3s ease;
+  /* خلفية صفراء فاتحة */
+    border: 2px solid #f4d03f; /* حواف صفراء */
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    padding: 30px;
+    height: 220px; /* ارتفاع أكبر */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+.category-icon {
+    font-size: 50px; /* أكبر الأيقونات */
+    margin-bottom: 20px;
+    color: #f4d03f; /* لون أيقونة أصفر */
+}
+.category-name {
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+}
+.category-count {
+    font-size: 1rem;
+    color: #555;
+}
+</style>
+
+<div class="container my-5">
+    <h2 class="fw-bold mb-5 text-center">📂 Explore Categories</h2>
+    <div class="row g-4">
+        {% for cat in categories %}
+        <div class="col-md-3 col-sm-6">
+            <a href="{% url 'books_by_category' cat.id %}" class="category-card d-block text-center shadow-sm">
+                <!-- أيقونة مميزة -->
+                <div class="category-icon">
+                    <i class="bi bi-book"></i>
+                </div>
+                <div class="category-name">{{ cat.name }}</div>
+                <div class="category-count">{{ cat.book_set.count }} Books</div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+{% endblock %}
