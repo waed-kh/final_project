@@ -21,7 +21,9 @@ LOGIN_URL = '/login/'
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]  # مجلد التطوير اللي فيه ملفات static الأصلية
+
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # مجلد التطوير اللي فيه ملفات static الأصلية
 STATIC_ROOT = BASE_DIR / "staticfiles"    # المجلد النهائي بعد collectstatic
 
 # Media files
